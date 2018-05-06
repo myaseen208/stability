@@ -1,0 +1,28 @@
+Package: stability
+Type: Package
+Title: Stability Analysis of Genotype by Environment Interaction (GEI)
+Version: 0.3.0
+Authors@R: c(
+              person(c("Muhammad", "Yaseen"),  email = "myaseen208@gmail.com", role = c("aut", "cre"))
+            , person(c("Kent", "M.", "Eskridge"),  email = "keskridge1@unl.edu ", role = c("aut", "ctb"))
+            )
+Maintainer: Muhammad Yaseen <myaseen208@gmail.com>
+Description: Functionalities to perform Stability Analysis of Genotype by Environment Interaction (GEI) to identify superior and stable genotypes under diverse environments. It performs Eberhart & Russel's ANOVA (1966) (<doi:10.2135/cropsci1966.0011183X000600010011x>), Finlay and Wilkinson (1963) Joint Linear Regression (<doi:10.1071/AR9630742>), Wricke (1962, 1964) Ecovalence, Shukla's stability variance parameter (1972) (<doi:10.1038/hdy.1972.87>)  and Kang's (1991) (<doi:10.2134/agronj1991.00021962008300010037x>) simultaneous selection for high yielding and stable parameter.
+Depends: R (>= 3.1)
+Imports: 
+  dplyr,
+  ggplot2,
+  ggfortify,
+  lme4,
+  magrittr,
+  matrixStats,
+  reshape2,
+  rlang,
+  scales,
+  stats,
+  tibble, 
+  tidyr
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
