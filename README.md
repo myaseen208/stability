@@ -10,8 +10,8 @@
  and  Kang's (1991) simultaneous selection for high yielding and stable parameter (https://dl.sciencesocieties.org/publications/aj/abstracts/83/1/AJ0830010161).
 
 ## Authors
-1. Muhammad Yaseen (\email{myaseen208@gmail.com}
-2. Kent M. Edkridge (\email{keskridge1@unl.edu}
+1. Muhammad Yaseen (myaseen208@gmail.com)
+2. Kent M. Edkridge (keskridge1@unl.edu)
 
 ## Installation
 Use **devtools** to install the development version from Github:
