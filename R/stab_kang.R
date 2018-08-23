@@ -7,8 +7,11 @@ if(getRversion() >= "2.15.1"){
 
 #' @name    stab_kang
 #' @aliases stab_kang
-#' @title   Additive ANOVA for Genotypes by Environment Interaction (GEI) model
-#' @description Additive ANOVA for Genotypes by Environment Interaction (GEI) model
+#' @title   Stability Kang Function
+#' @description Performs a stability analysis based on the Kang (1988)
+#'              criteria. Kang nonparametric stability (ranksum) uses
+#'              both "trait single value" and stability variance (Shukla, 1972),
+#'              and the genotype with the lowest ranksum is commonly the most favorable one.
 #'
 #' @param .data  data.frame
 #' @param .y     Response Variable
@@ -16,14 +19,21 @@ if(getRversion() >= "2.15.1"){
 #' @param .gen   Genotypes Factor
 #' @param .env   Environment Factor
 #'
-#' @return Additive ANOVA
 #'
 #' @author
-#' Muhammad Yaseen (\email{myaseen208@@gmail.com})
+#' \enumerate{
+#'          \item Muhammad Yaseen (\email{myaseen208@@gmail.com})
+#'          \item Kent M. Edkridge (\email{keskridge1@@unl.edu})
+#'          }
+#'
+#'
 #'
 #' @references
-#'  Singh, R. K. and Chaudhary, B. D. (2004) \emph{Biometrical Methods in Quantitative Genetic Analysis}.
-#'              New Delhi: Kalyani.
+#' \enumerate{
+#'          \item  Kang, M.S.  (1988). A rank-sum method for selecting high-yielding, stable corn genotypes. \emph{Cereal Research Communications},  \strong{16}, 1-2.
+#'          \item  Shukla, G.K.  (1972). Some aspects of partitioning genotype environmental components of variability. \emph{Heredity},  \strong{29}, 237-245.
+#'
+#'          }
 #'
 #' @import dplyr
 #'

@@ -44,26 +44,26 @@ add_anova <- function(.data, .y, .rep, .gen, .env) {
 
 add_anova.default <-
   function(.data, .y, .rep, .gen, .env){
+    Y   <- quo_name(enquo(.y))
+    Rep <- quo_name(enquo(.rep))
+    G   <- quo_name(enquo(.gen))
+    E   <- quo_name(enquo(.env))
 
-    Y   <- enquo(.y)
-    Rep <- enquo(.rep)
-    G   <- enquo(.gen)
-    E   <- enquo(.env)
+    fm1 <- formula(paste0(Y, "~", paste(E, paste(Rep, E, sep = ":"),
+                                        G, paste(G, E, sep = ":"), sep = "+")))
 
-    fm1 <- lm(
-              formula = terms(.data$Y ~ .data$E + .data$Rep:.data$E + .data$G + .data$G:.data$E, keep.order = TRUE)
-            , data    = .data
-              )
-    fm1ANOVA <- anova(fm1)
-    rownames(fm1ANOVA) <- c("Env", "Rep(Env)", "Gen", "Gen:Env", "Residuals")
-    fm1ANOVA[1, 4] <- fm1ANOVA[1, 3]/fm1ANOVA[2, 3]
-    fm1ANOVA[2, 4] <- NA
-    fm1ANOVA[1, 5] <- 1-pf(as.numeric(fm1ANOVA[1, 4]), fm1ANOVA[1, 1], fm1ANOVA[2, 1])
-    fm1ANOVA[2, 5] <- 1-pf(as.numeric(fm1ANOVA[2, 4]), fm1ANOVA[2, 1], fm1ANOVA[5, 1])
-    class(fm1ANOVA) <- c("anova", "data.frame")
+    fm2 <- lm(terms(fm1, keep.order = TRUE), data = .data)
+    fm2ANOVA <- anova(fm2)
+    rownames(fm2ANOVA) <- c("Env", "Rep(Env)", "Gen", "Gen:Env",
+                            "Residuals")
+    fm2ANOVA[1, 4] <- fm2ANOVA[1, 3]/fm2ANOVA[2, 3]
+    fm2ANOVA[2, 4] <- NA
+    fm2ANOVA[1, 5] <- 1 - pf(as.numeric(fm2ANOVA[1, 4]), fm2ANOVA[1,
+                                                                  1], fm2ANOVA[2, 1])
+    fm2ANOVA[2, 5] <- 1 - pf(as.numeric(fm2ANOVA[2, 4]), fm2ANOVA[2,
+                                                                  1], fm2ANOVA[5, 1])
+    class(fm2ANOVA) <- c("anova", "data.frame")
+    return(list(anova = fm2ANOVA))
 
-    return(
-      list(
-        "anova" = fm1ANOVA
-      ))
   }
+

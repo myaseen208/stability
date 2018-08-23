@@ -21,9 +21,11 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -32,6 +34,7 @@
 
 <meta property="og:description" content="Calcuates Genotype by Environment Interaction Means along with their Ranks" />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -153,18 +156,18 @@
 
 <span class='no'>Yield.ge_means</span>$<span class='no'>ge_means</span></div><div class='output co'>#&gt; # A tibble: 60 x 12
 #&gt; # Groups:   Gen [60]
-#&gt;    Gen      FSD  FSDR Okara Sargodha Gujranwala KotNaina   KSK Khanewal Sahiwal
-#&gt;    &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
-#&gt;  1 013BT… 4816  4524. 4048.    4508       3896.    3285  3717     5038.   4772 
-#&gt;  2 122557 4880. 4156. 2984.    4754       4292.    4092  3124.    4971    4758.
-#&gt;  3 122559 4135  4136  4377     4688.      4425     3744. 3011     5012.   5322.
-#&gt;  4 12B.2… 5899  4038. 3842.    5766       4716.    4084. 3074     4851    4659 
-#&gt;  5 12FJ26 4518  4348  3041     4022.      3942.    4094. 4202     4908.   4206.
-#&gt;  6 14B.1… 4070. 3834. 3606.    5075       3225     3992  3222.    4770    4535 
-#&gt;  7 14C036 3660. 4018. 2951     3980.      4693     3508. 3566.    4918.   4165 
-#&gt;  8 14C040 5011  4152. 3313     3895       3764.    2884. 3566     4392.   3968 
-#&gt;  9 9496   4589  3716  3781     4142.      4358.    3927  2948.    4995    4688.
-#&gt; 10 AUR08… 4966. 3782. 3850     4054       3984.    3505  2684     4448.   4324.
+#&gt;    Gen     FSD  FSDR Okara Sargodha Gujranwala KotNaina   KSK Khanewal Sahiwal
+#&gt;    &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+#&gt;  1 013B… 4816  4524. 4048.    4508       3896.    3285  3717     5038.   4772 
+#&gt;  2 1225… 4880. 4156. 2984.    4754       4292.    4092  3124.    4971    4758.
+#&gt;  3 1225… 4135  4136  4377     4688.      4425     3744. 3011     5012.   5322.
+#&gt;  4 12B.… 5899  4038. 3842.    5766       4716.    4084. 3074     4851    4659 
+#&gt;  5 12FJ… 4518  4348  3041     4022.      3942.    4094. 4202     4908.   4206.
+#&gt;  6 14B.… 4070. 3834. 3606.    5075       3225     3992  3222.    4770    4535 
+#&gt;  7 14C0… 3660. 4018. 2951     3980.      4693     3508. 3566.    4918.   4165 
+#&gt;  8 14C0… 5011  4152. 3313     3895       3764.    2884. 3566     4392.   3968 
+#&gt;  9 9496  4589  3716  3781     4142.      4358.    3927  2948.    4995    4688.
+#&gt; 10 AUR0… 4966. 3782. 3850     4054       3984.    3505  2684     4448.   4324.
 #&gt; # ... with 50 more rows, and 2 more variables: Dhakkar &lt;dbl&gt;,
 #&gt; #   Bahawalnagar &lt;dbl&gt;</div><div class='input'><span class='no'>Yield.ge_means</span>$<span class='no'>ge_ranks</span></div><div class='output co'>#&gt;              1               2              3            4          
 #&gt; FSD          "12B.2511"      "V14170"       "DN126"      "PR120"    

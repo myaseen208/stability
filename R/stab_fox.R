@@ -6,8 +6,13 @@ if(getRversion() >= "2.15.1"){
 
 #' @name    stab_fox
 #' @aliases stab_fox
-#' @title   Additive ANOVA for Genotypes by Environment Interaction (GEI) model
-#' @description Additive ANOVA for Genotypes by Environment Interaction (GEI) model
+#' @title   Stability Fox Function
+#' @description Performs a stability analysis based on the criteria of
+#'              Fox et al. (1990), using the statistical "TOP third" only.
+#'              In Fox function, a stratified ranking of the genotypes at
+#'              each environment separately is done. The proportion of locations
+#'              at which the genotype occurred in the top third are expressed in
+#'              TOP output.
 #'
 #' @param .data  data.frame
 #' @param .y     Response Variable
@@ -15,14 +20,19 @@ if(getRversion() >= "2.15.1"){
 #' @param .gen   Genotypes Factor
 #' @param .env   Environment Factor
 #'
-#' @return Additive ANOVA
 #'
 #' @author
-#' Muhammad Yaseen (\email{myaseen208@@gmail.com})
+#' \enumerate{
+#'          \item Muhammad Yaseen (\email{myaseen208@@gmail.com})
+#'          \item Kent M. Edkridge (\email{keskridge1@@unl.edu})
+#'          }
+#'
+#'
 #'
 #' @references
-#'  Singh, R. K. and Chaudhary, B. D. (2004) \emph{Biometrical Methods in Quantitative Genetic Analysis}.
-#'              New Delhi: Kalyani.
+#' \enumerate{
+#'          \item  Fox, P.N. and Skovmand, B. and  Thompson, B.K. and  Braun, H.J. and Cormier, R. (1990). Yield and adaptation of hexaploid spring triticale. \emph{Euphytica},  \strong{47}, 57-64.
+#'          }
 #'
 #' @import dplyr
 #'
