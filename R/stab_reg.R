@@ -20,7 +20,11 @@ if(getRversion() >= "2.15.1"){
 #' @return Additive ANOVA
 #'
 #' @author
-#' Muhammad Yaseen (\email{myaseen208@@gmail.com})
+#' \enumerate{
+#'          \item Muhammad Yaseen (\email{myaseen208@@gmail.com})
+#'          \item Kent M. Edkridge (\email{keskridge1@@unl.edu})
+#'          }
+#'
 #'
 #' @references
 #'  Singh, R. K. and Chaudhary, B. D. (2004) \emph{Biometrical Methods in Quantitative Genetic Analysis}.

@@ -3,7 +3,7 @@
 \name{stab_masv}
 \alias{stab_masv}
 \alias{stab_masv.default}
-\title{Additive ANOVA for Genotypes by Environment Interaction (GEI) model}
+\title{Modified Additive Main Effects and Multiplicative Interacion Stability Value}
 \usage{
 stab_masv(.data, .y, .rep, .gen, .env, .m = 2)
 
@@ -47,5 +47,8 @@ Singh, R. K. and Chaudhary, B. D. (2004) \emph{Biometrical Methods in Quantitati
              New Delhi: Kalyani.
 }
 \author{
-Muhammad Yaseen (\email{myaseen208@gmail.com})
+\enumerate{
+         \item Muhammad Yaseen (\email{myaseen208@gmail.com})
+         \item Kent M. Edkridge (\email{keskridge1@unl.edu})
+         }
 }

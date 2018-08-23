@@ -7,8 +7,8 @@ if(getRversion() >= "2.15.1"){
 
 #' @name    stab_dist
 #' @aliases stab_dist
-#' @title   Additive ANOVA for Genotypes by Environment Interaction (GEI) model
-#' @description Additive ANOVA for Genotypes by Environment Interaction (GEI) model
+#' @title   Stability Distance in AMMI
+#' @description Stability Distance of Genotypes in Additive ANOVA for Genotypes by Environment Interaction (GEI) model
 #'
 #' @param .data  data.frame
 #' @param .y     Response Variable
@@ -17,14 +17,14 @@ if(getRversion() >= "2.15.1"){
 #' @param .env   Environment Factor
 #' @param .m     No of PCs retained
 #'
-#' @return Additive ANOVA
+#' @return Stability Distance
 #'
 #' @author
-#' Muhammad Yaseen (\email{myaseen208@@gmail.com})
+#' \enumerate{
+#'          \item Muhammad Yaseen (\email{myaseen208@@gmail.com})
+#'          \item Kent M. Edkridge (\email{keskridge1@@unl.edu})
+#'          }
 #'
-#' @references
-#'  Singh, R. K. and Chaudhary, B. D. (2004) \emph{Biometrical Methods in Quantitative Genetic Analysis}.
-#'              New Delhi: Kalyani.
 #'
 #' @import dplyr
 #' @import tibble

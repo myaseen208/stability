@@ -3,7 +3,7 @@
 \name{stab_dist}
 \alias{stab_dist}
 \alias{stab_dist.default}
-\title{Additive ANOVA for Genotypes by Environment Interaction (GEI) model}
+\title{Stability Distance in AMMI}
 \usage{
 stab_dist(.data, .y, .rep, .gen, .env, .m = 2)
 
@@ -23,10 +23,10 @@ stab_dist(.data, .y, .rep, .gen, .env, .m = 2)
 \item{.m}{No of PCs retained}
 }
 \value{
-Additive ANOVA
+Stability Distance
 }
 \description{
-Additive ANOVA for Genotypes by Environment Interaction (GEI) model
+Stability Distance of Genotypes in Additive ANOVA for Genotypes by Environment Interaction (GEI) model
 }
 \examples{
 data(ge_data)
@@ -42,10 +42,9 @@ YieldDist <-
 YieldDist
 
 }
-\references{
-Singh, R. K. and Chaudhary, B. D. (2004) \emph{Biometrical Methods in Quantitative Genetic Analysis}.
-             New Delhi: Kalyani.
-}
 \author{
-Muhammad Yaseen (\email{myaseen208@gmail.com})
+\enumerate{
+         \item Muhammad Yaseen (\email{myaseen208@gmail.com})
+         \item Kent M. Edkridge (\email{keskridge1@unl.edu})
+         }
 }
