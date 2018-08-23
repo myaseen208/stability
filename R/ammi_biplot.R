@@ -61,27 +61,32 @@ ammi_biplot <- function(.data, .y, .rep, .gen, .env) {
 ammi_biplot.default <-
   function(.data, .y, .rep, .gen, .env){
 
-    Y   <- enquo(.y)
-    Rep <- enquo(.rep)
-    G   <- enquo(.gen)
-    E   <- enquo(.env)
+    Y   <- quo_name(enquo(.y))
+    Rep <- quo_name(enquo(.rep))
+    G   <- quo_name(enquo(.gen))
+    E   <- quo_name(enquo(.env))
+
+    .y   <- enquo(.y)
+    .rep <- enquo(.rep)
+    .gen <- enquo(.gen)
+    .env  <- enquo(.env)
 
     g_means <-
       .data %>%
-      dplyr::group_by(!! G ) %>%
-      dplyr::summarize(Mean = mean(!! Y))
+      dplyr::group_by(!! .gen) %>%
+      dplyr::summarize(Mean = mean(!! .y))
 
-    names(g_means) <- c("G", "Mean")
+     names(g_means) <- c("Genotype", "Mean")
 
-    fm2 <- aov(.data$Y ~ .data$E*.data$G + Error(.data$E/.data$Rep))
-    GE.Effs <- t(model.tables(fm2, type = "effects", cterms = ".data$E:.data$G")$tables$".data$E:.data$G")
+     fm2 <- aov(.data$Y ~ .data$E*.data$G + Error(.data$E/.data$Rep))
+     GE.Effs <- t(model.tables(fm2, type = "effects", cterms = ".data$E:.data$G")$tables$".data$E:.data$G")
 
-    GE.AMMI <- stats::prcomp(GE.Effs, scale. = FALSE)
+     GE.AMMI <- stats::prcomp(GE.Effs, scale. = FALSE)
 
-    aami.biplot <-
-      ggplot2::autoplot(
-          object         = GE.AMMI
-        , label          = TRUE
+     aami.biplot <-
+       ggplot2::autoplot(
+           object         = GE.AMMI
+         , label          = TRUE
         , loadings.label = TRUE
       ) +
       scale_x_continuous(sec.axis = dup_axis()) +
@@ -89,10 +94,11 @@ ammi_biplot.default <-
       theme_bw()
 
     MeanPCs <-
-      tibble::as_tibble(data.frame(
+      data.frame(
            g_means
          , GE.AMMI$x
-      ))
+      ) %>%
+      tibble::as_tibble()
 
 
     MeanPC1Plot <-
@@ -107,8 +113,8 @@ ammi_biplot.default <-
       theme_bw()
 
     return(list(
-          aami.biplot = aami.biplot
-        , MeanPC1Plot = MeanPC1Plot
+        aami.biplot = aami.biplot
+      , MeanPC1Plot = MeanPC1Plot
           ))
 
   }

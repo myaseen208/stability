@@ -88,11 +88,13 @@ stab_reg.default <-
         dplyr::group_by(!! E) %>%
         dplyr::mutate(EnvMean = mean(GEMean))
 
+    names(DataNew) <- c("Gen", "Env", "GEMean", "EnvMean")
+
     IndvReg <- lme4::lmList(GEMean ~ EnvMean|Gen, data = DataNew)
     IndvRegFit <- summary(IndvReg)
 
     StabIndvReg <-
-      tibble::as_tibble(data.frame(
+      data.frame(
            g_means
         , "Slope" = coef(IndvRegFit)[ , , 2][ ,1]
         , "LCI"   = confint(IndvReg)[ , ,2][ ,1]
@@ -101,7 +103,8 @@ stab_reg.default <-
         , "RMSE"  = IndvRegFit$sigma
         , "SSE"   = IndvRegFit$sigma^2*IndvRegFit$df[ ,2]
         , "Delta" = IndvRegFit$sigma^2*IndvRegFit$df[ ,2]/r
-      ))
+      ) %>%
+      tibble::as_tibble()
 
     # IndvReg <-
     #   DataNew %>%
@@ -133,8 +136,8 @@ stab_reg.default <-
 
     return(
       list(
-          StabIndvReg   = StabIndvReg
-        , MeanSlopePlot = MeanSlopePlot
+           StabIndvReg   = StabIndvReg
+         , MeanSlopePlot = MeanSlopePlot
         ))
   }
 

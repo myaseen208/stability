@@ -22,7 +22,7 @@
 #'              New Delhi: Kalyani.
 #'
 #' @import rlang
-#' @importFrom stats anova as.formula ave coef confint lm pf terms
+#' @importFrom stats anova as.formula ave coef confint formula lm pf terms
 #'
 #' @export
 #'
