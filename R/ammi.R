@@ -53,29 +53,35 @@ ammi <- function(.data, .y, .rep, .gen, .env) {
 ammi.default <-
   function(.data, .y, .rep, .gen, .env){
 
-    Y   <- quo_name(enquo(.y))
-    Rep <- quo_name(enquo(.rep))
-    G   <- quo_name(enquo(.gen))
-    E   <- quo_name(enquo(.env))
+    Y   <- deparse(substitute(.y))
+    Rep <- deparse(substitute(.rep))
+    G   <- deparse(substitute(.gen))
+    E   <- deparse(substitute(.env))
 
-    g <- length(levels(.data$G))
-    e <- length(levels(.data$E))
-    r <- length(levels(.data$Rep))
+    g <- length(levels(.data[[G]]))
+    e <- length(levels(.data[[E]]))
+    r <- length(levels(.data[[Rep]]))
     Min.G.E <- min(g, e)
 
 
-    GE.ANOVA <-
-      add_anova(
-          .data = .data
-        , .y    = .data$Y
-        , .rep  = .data$Rep
-        , .gen  = .data$G
-        , .env  = .data$E
-      )[[1]]
+    fm1 <- lm(formula = terms(.data[[Y]] ~ .data[[E]] + .data[[Rep]]:.data[[E]] +
+                                .data[[G]] + .data[[G]]:.data[[E]], keep.order = TRUE))
+    fm1ANOVA <- anova(fm1)
+    rownames(fm1ANOVA) <- c("Env", "Rep(Env)", "Gen", "Gen:Env",
+                            "Residuals")
+    fm1ANOVA[1, 4] <- fm1ANOVA[1, 3]/fm1ANOVA[2, 3]
+    fm1ANOVA[2, 4] <- NA
+    fm1ANOVA[1, 5] <- 1 - pf(as.numeric(fm1ANOVA[1, 4]), fm1ANOVA[1,
+                                                                  1], fm1ANOVA[2, 1])
+    fm1ANOVA[2, 5] <- 1 - pf(as.numeric(fm1ANOVA[2, 4]), fm1ANOVA[2,
+                                                                  1], fm1ANOVA[5, 1])
 
+    class(fm1ANOVA) <- c("anova", "data.frame")
 
-     fm2 <- aov(.data$Y ~ .data$E*.data$G + Error(.data$E/.data$Rep))
-     GE.Effs <- t(model.tables(fm2, type = "effects", cterms = ".data$E:.data$G")$tables$".data$E:.data$G")
+    GE.ANOVA <- fm1ANOVA
+
+    fm2 <- aov(.data[[Y]] ~ .data[[E]]*.data[[G]] + Error(.data[[E]]/.data[[Rep]]))
+    GE.Effs <- t(model.tables(fm2, type = "effects", cterms = ".data[[E]]:.data[[G]]")$tables$".data[[E]]:.data[[G]]")
 
     SVD       <- svd(GE.Effs)
     D         <- diag(SVD$d[1:Min.G.E])
@@ -83,8 +89,8 @@ ammi.default <-
     EnvM      <- SVD$v %*% sqrt(D)
     Ecolnumb  <- c(1:Min.G.E)
     Ecolnames <- paste0("PC", Ecolnumb)
-    dimnames(GenM) <- list(levels(.data$G), Ecolnames)
-    dimnames(EnvM) <- list(levels(.data$E), Ecolnames)
+    dimnames(GenM) <- list(levels(.data[[G]]), Ecolnames)
+    dimnames(EnvM) <- list(levels(.data[[E]]), Ecolnames)
 
 
     SVD.Values <- SVD$d

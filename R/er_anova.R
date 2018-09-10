@@ -51,29 +51,49 @@ er_anova <- function(.data, .y, .rep, .gen, .env) {
 er_anova.default <-
   function(.data, .y, .rep, .gen, .env){
 
-    Y   <- enquo(.y)
-    Rep <- enquo(.rep)
-    G   <- enquo(.gen)
-    E   <- enquo(.env)
 
-    g <- length(levels(.data$G))
-    e <- length(levels(.data$E))
-    r <- length(levels(.data$Rep))
+    Y   <- deparse(substitute(.y))
+    Rep <- deparse(substitute(.rep))
+    G   <- deparse(substitute(.gen))
+    E   <- deparse(substitute(.env))
 
-    # Individual Regression
+    g <- length(levels(.data[[G]]))
+    e <- length(levels(.data[[E]]))
+    r <- length(levels(.data[[Rep]]))
+
+
+    g_means <-
+      .data %>%
+      dplyr::group_by(!!rlang::sym(G)) %>%
+      dplyr::summarize(Mean = mean(!!rlang::sym(Y)))
+
+    DataNew  <-
+      .data %>%
+      dplyr::group_by(!!rlang::sym(G), !!rlang::sym(E)) %>%
+      dplyr::summarize(GEMean = mean(!!rlang::sym(Y))) %>%
+      dplyr::group_by(!!rlang::sym(E)) %>%
+      dplyr::mutate(EnvMean = mean(GEMean))
+
+    names(DataNew) <- c("Gen", "Env", "GEMean", "EnvMean")
+
+    IndvReg <- lme4::lmList(GEMean ~ EnvMean|Gen, data = DataNew)
+    IndvRegFit <- summary(IndvReg)
+
     StabIndvReg <-
-            stab_reg(
-                .data = .data
-              , .y    = !! Y
-              , .rep  = !! Rep
-              , .gen  = !! G
-              , .env  = !! E
-              )$StabIndvReg
-
+      data.frame(
+        g_means
+        , "Slope" = coef(IndvRegFit)[ , , 2][ ,1]
+        , "LCI"   = confint(IndvReg)[ , ,2][ ,1]
+        , "UCI"   = confint(IndvReg)[ , ,2][ ,2]
+        , "R.Sqr" = IndvRegFit$r.squared
+        , "RMSE"  = IndvRegFit$sigma
+        , "SSE"   = IndvRegFit$sigma^2*IndvRegFit$df[ ,2]
+        , "Delta" = IndvRegFit$sigma^2*IndvRegFit$df[ ,2]/r
+      ) %>%
+      tibble::as_tibble()
 
 fm1 <- lm(
-            formula = terms(.data$Y ~ .data$E + .data$Rep:.data$E + .data$G + .data$G:.data$E, keep.order = TRUE)
-          , data = .data
+            formula = terms(.data[[Y]] ~ .data[[E]] + .data[[Rep]]:.data[[E]] + .data[[G]] + .data[[G]]:.data[[E]], keep.order = TRUE)
           )
 fm1ANOVA <- anova(fm1)
 rownames(fm1ANOVA) <- c("Env", "Rep(Env)", "Gen", "Gen:Env", "Residuals")
@@ -145,7 +165,7 @@ class(fm1ANOVA) <- c("anova", "data.frame")
         , "  Env (linear)"
         , "  Gen x Env(linear)"
         , "  Pooled deviation"
-        , paste0("    ", levels(.data$G))
+        , paste0("    ", levels(.data[[G]]))
         , "Pooled error"
       )
 

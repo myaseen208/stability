@@ -55,50 +55,62 @@ stab_dist <- function(.data, .y, .rep, .gen, .env, .m = 2) {
 stab_dist.default <-
   function(.data, .y, .rep, .gen, .env, .m = 2){
 
-    Y   <- enquo(.y)
-    Rep <- enquo(.rep)
-    G   <- enquo(.gen)
-    E   <- enquo(.env)
-    m   <- enquo(.m)
+    Y   <- deparse(substitute(.y))
+    Rep <- deparse(substitute(.rep))
+    G   <- deparse(substitute(.gen))
+    E   <- deparse(substitute(.env))
 
-    g <- length(levels(.data$G))
-    e <- length(levels(.data$E))
-    r <- length(levels(.data$Rep))
-
-    GMeans <-
-      ge_means(
-         .data  = .data
-        , .y    = !! Y
-        , .gen  = !! G
-        , .env  = !! E
-      )$g_means
-
-    names(GMeans) <- c("Gen", "Mean")
+    g <- length(levels(.data[[G]]))
+    e <- length(levels(.data[[E]]))
+    r <- length(levels(.data[[Rep]]))
 
 
-    GE.Effs <-
-      ge_effects(
-        .data  = .data
-        , .y    = !! Y
-        , .gen  = !! G
-        , .env  = !! E
-      )$ge_effects
 
-    SVD <- svd(GE.Effs)
+    g_means <-
+      .data %>%
+      dplyr::group_by(!!rlang::sym(G)) %>%
+      dplyr::summarize(Mean = mean(!!rlang::sym(Y)))
+
+
+    ge_means <-
+      .data %>%
+      dplyr::group_by(!!rlang::sym(G), !!rlang::sym(E)) %>%
+      dplyr::summarize(GE.Mean = mean(!!rlang::sym(Y))) %>%
+      tidyr::spread(key = E, value = GE.Mean)
+
+    ge_means1 <- as.matrix(ge_means[, -1])
+    rownames(ge_means1) <- c(ge_means[, 1])[[1]]
+
+    gge_effects <-
+      sweep(
+        x      = ge_means1
+        , MARGIN = 2
+        , STATS  = colMeans(ge_means1)
+      )
+
+    ge_effects <-
+      sweep(
+        x      = gge_effects
+        , MARGIN = 1
+        , STATS  = rowMeans(gge_effects)
+      )
+
+
+    SVD <- svd(ge_effects)
     PC <- SVD$u %*% diag(sqrt(SVD$d))
-    dimnames(PC) <- list(row.names(GE.Effs), paste0("PC", 1:e))
+    dimnames(PC) <- list(row.names(ge_effects), paste0("PC", 1:e))
 
 
     stabDist <-
-      GMeans %>%
+      g_means %>%
       dplyr::mutate(
-          Dist    = sqrt(diag(PC[ ,1:(!!m)] %*% t(PC[ ,1:(!!m)])))
+          Dist    = sqrt(diag(PC[ ,1:(.m)] %*% t(PC[ ,1:(.m)])))
         , rMean   = min_rank(desc(Mean))
         , rDist   = min_rank(Dist)
         , YSIDist = rMean + rDist
       )
 
     return(list(
-        stabDist = stabDist
+      stabDist = stabDist
            ))
   }

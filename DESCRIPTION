@@ -1,7 +1,7 @@
 Package: stability
 Type: Package
 Title: Stability Analysis of Genotype by Environment Interaction (GEI)
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: c(
               person(c("Muhammad", "Yaseen"),  email = "myaseen208@gmail.com", role = c("aut", "cre"))
             , person(c("Kent", "M.", "Eskridge"),  email = "keskridge1@unl.edu ", role = c("aut", "ctb"))

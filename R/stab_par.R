@@ -58,37 +58,49 @@ stab_par <- function(.data, .y, .rep, .gen, .env, alpha = 0.1, .envCov = NULL) {
 stab_par.default <-
   function(.data, .y, .rep, .gen, .env, alpha = 0.1, .envCov = NULL) {
 
+    Y   <- deparse(substitute(.y))
+    Rep <- deparse(substitute(.rep))
+    G   <- deparse(substitute(.gen))
+    E   <- deparse(substitute(.env))
+    EnvCov   <- deparse(substitute(.envCov))
 
-    Y      <- rlang::enquo(.y)
-    Rep    <- rlang::enquo(.rep)
-    G      <- rlang::enquo(.gen)
-    E      <- rlang::enquo(.env)
-    EnvCov <- rlang::enquo(.envCov)
+    g <- length(levels(.data[[G]]))
+    e <- length(levels(.data[[E]]))
+    r <- length(levels(.data[[Rep]]))
 
-    g <- length(levels(.data$G))
-    e <- length(levels(.data$E))
-    r <- length(levels(.data$Rep))
+    fm1 <- lm(formula = terms(.data[[Y]] ~ .data[[E]] + .data[[Rep]]:.data[[E]] +
+                                .data[[G]] + .data[[G]]:.data[[E]], keep.order = TRUE))
+    fm1ANOVA <- anova(fm1)
+    rownames(fm1ANOVA) <- c("Env", "Rep(Env)", "Gen", "Gen:Env",
+                            "Residuals")
+    fm1ANOVA[1, 4] <- fm1ANOVA[1, 3]/fm1ANOVA[2, 3]
+    fm1ANOVA[2, 4] <- NA
+    fm1ANOVA[1, 5] <- 1 - pf(as.numeric(fm1ANOVA[1, 4]), fm1ANOVA[1,
+                                                                  1], fm1ANOVA[2, 1])
+    fm1ANOVA[2, 5] <- 1 - pf(as.numeric(fm1ANOVA[2, 4]), fm1ANOVA[2,
+                                                                  1], fm1ANOVA[5, 1])
+    class(fm1ANOVA) <- c("anova", "data.frame")
 
-    MSE <-
-      add_anova(
-        .data = .data
-        , .y    = !! Y
-        , .rep  = !! Rep
-        , .gen  = !! G
-        , .env  = !! E
-      )[[1]]["Residuals", "Mean Sq"]
+    MSE <- fm1ANOVA["Residuals", "Mean Sq"]
+
+    g_means <-
+      .data %>%
+      dplyr::group_by(!!rlang::sym(G)) %>%
+      dplyr::summarize(Mean = mean(!!rlang::sym(Y)))
+
+    ge_means0 <-
+      .data %>%
+      dplyr::group_by(!!rlang::sym(G), !!rlang::sym(E)) %>%
+      dplyr::summarize(GE.Mean = mean(!!rlang::sym(Y))) %>%
+      tidyr::spread(key = E, value = GE.Mean)
+
+    ge_means1 <- as.matrix(ge_means0[, -1])
+    rownames(ge_means1) <- c(ge_means0[, 1])[[1]]
 
 
-    x <-
-        ge_means(
-              .data  = .data
-             , .y    = !! Y
-             , .gen  = !! G
-             , .env  = !! E
-             )$ge_means1
+    x <- ge_means1
 
-
-     if(is.null(.data$EnvCov) == TRUE) {
+     if(is.null(.data[[EnvCov]]) == TRUE) {
        EnvCov <- colMeans(x) - mean(x)
        }
      else
@@ -96,35 +108,27 @@ stab_par.default <-
          EnvCov <- EnvCov
        }
 
-    g_means <-
-      ge_means(
-        .data  = .data
-        , .y    = !! Y
-        , .gen  = !! G
-        , .env  = !! E
-      )$g_means
-    names(g_means) <- c("Gen", "Mean")
 
     ge_means <-
       .data %>%
-      dplyr::group_by(!! G, !! E) %>%
-      dplyr::summarize(GE.Mean = mean(!! Y))
+      dplyr::group_by(!!rlang::sym(G), !!rlang::sym(E)) %>%
+      dplyr::summarize(GE.Mean = mean(!!rlang::sym(Y)))
     names(ge_means) <- c("G", "E", "GE.Mean")
 
-    fm1ANOVA <- anova(lm(formula = GE.Mean ~ G*E, data = ge_means))
+    fm2ANOVA <- anova(lm(formula = GE.Mean ~ G*E, data = ge_means))
 
-    G.Effects <-
+    gge_effects <-
       sweep(
-          x = x
-        , MARGIN = 1
-        , STATS = rowMeans(x)
+        x      = ge_means1
+        , MARGIN = 2
+        , STATS  = colMeans(ge_means1)
       )
 
-    GE.Effects <-
+    ge_effects <-
       sweep(
-        x = G.Effects
-        , MARGIN = 2
-        , STATS = colMeans(G.Effects)
+        x      = gge_effects
+        , MARGIN = 1
+        , STATS  = rowMeans(gge_effects)
       )
 
 
@@ -132,24 +136,24 @@ stab_par.default <-
     GenSS    <- rowVars(x)*(e - 1)
     Gen.Var  <- rowVars(x)
     Gen.CV   <- rowSds(x)/rowMeans(x)*100
-    Ecov     <- rowVars(GE.Effects)*(e - 1)
+    Ecov     <- rowVars(ge_effects)*(e - 1)
     GE.SS    <- sum(Ecov)
     GE.MSE   <- sum(Ecov)/((g-1)*(e-1))
 
     Sigma   <- g/((g-2)*(e-1)) * Ecov - GE.MSE/(g-2)
-    Beta    <- GE.Effects %*% EnvCov/sum(EnvCov^2)
-    New.GE.Effects <-
-          GE.Effects -
+    Beta    <- ge_effects %*% EnvCov/sum(EnvCov^2)
+    New.ge_effects <-
+          ge_effects -
          matrix(data = EnvCov, nrow=g, ncol=e, byrow=TRUE) *
          matrix(data = Beta, nrow = g, ncol = e, byrow = FALSE)
 
-    SP      <- (g/((g-2)*(e-2)))*(rowSums(New.GE.Effects^2)- (sum(rowSums(New.GE.Effects^2))/(g*(g-1))))
+    SP      <- (g/((g-2)*(e-2)))*(rowSums(New.ge_effects^2)- (sum(rowSums(New.ge_effects^2))/(g*(g-1))))
     SSRes  <- ((g - 1)*(e - 2)*sum(SP))/g
-    SSHetro   <- fm1ANOVA["G:E", "Sum Sq"] - SSRes
+    SSHetro   <- fm2ANOVA["G:E", "Sum Sq"] - SSRes
 
 
-     Df <- c(sum(fm1ANOVA[-4, "Df"]), fm1ANOVA[-4, "Df"], fm1ANOVA["G", "Df"], fm1ANOVA["G:E", "Df"] - fm1ANOVA["G", "Df"], fm1ANOVA["G", "Df"]^2*(fm1ANOVA["E", "Df"] + 1))
-     SumS  <- c(sum(fm1ANOVA[-4, "Sum Sq"]), fm1ANOVA[-4, "Sum Sq"], SSHetro, SSRes, NA)*r
+     Df <- c(sum(fm2ANOVA[-4, "Df"]), fm2ANOVA[-4, "Df"], fm2ANOVA["G", "Df"], fm2ANOVA["G:E", "Df"] - fm2ANOVA["G", "Df"], fm2ANOVA["G", "Df"]^2*(fm2ANOVA["E", "Df"] + 1))
+     SumS  <- c(sum(fm2ANOVA[-4, "Sum Sq"]), fm2ANOVA[-4, "Sum Sq"], SSHetro, SSRes, NA)*r
      MeanSS <- c(NA, SumS[2:6]/Df[2:6], MSE)
 
     F <-
@@ -196,7 +200,7 @@ stab_par.default <-
     FM0 <- qf(1 - alpha, e-1, dfShukla)
     F05 <- qf(0.95, e-1, dfShukla)
     F01 <- qf(0.99, e-1, dfShukla)
-    MS    <- SSRes/(fm1ANOVA["Gen", "Df"]^2*(fm1ANOVA["Env", "Df"]+1))
+    MS    <- SSRes/(fm2ANOVA["Gen", "Df"]^2*(fm2ANOVA["Env", "Df"]+1))
     DMV05 <- qt(0.95, dfShukla) * sqrt(2 * MSE/(r * e))
     MES   <-  mean(x)
     FS    <- Sigma*r/MSE

@@ -61,27 +61,20 @@ ammi_biplot <- function(.data, .y, .rep, .gen, .env) {
 ammi_biplot.default <-
   function(.data, .y, .rep, .gen, .env){
 
-    Y   <- quo_name(enquo(.y))
-    Rep <- quo_name(enquo(.rep))
-    G   <- quo_name(enquo(.gen))
-    E   <- quo_name(enquo(.env))
-
-    .y   <- enquo(.y)
-    .rep <- enquo(.rep)
-    .gen <- enquo(.gen)
-    .env  <- enquo(.env)
+    Y   <- deparse(substitute(.y))
+    Rep <- deparse(substitute(.rep))
+    G   <- deparse(substitute(.gen))
+    E   <- deparse(substitute(.env))
 
     g_means <-
       .data %>%
-      dplyr::group_by(!! .gen) %>%
-      dplyr::summarize(Mean = mean(!! .y))
+      dplyr::group_by(!!rlang::sym(G)) %>%
+      dplyr::summarize(Mean = mean(!!rlang::sym(Y)))
 
-     names(g_means) <- c("Genotype", "Mean")
+    fm2 <- aov(.data[[Y]] ~ .data[[E]]*.data[[G]] + Error(.data[[E]]/.data[[Rep]]))
+    GE.Effs <- t(model.tables(fm2, type = "effects", cterms = ".data[[E]]*.data[[G]]")$tables$".data[[E]]:.data[[G]]")
 
-     fm2 <- aov(.data$Y ~ .data$E*.data$G + Error(.data$E/.data$Rep))
-     GE.Effs <- t(model.tables(fm2, type = "effects", cterms = ".data$E:.data$G")$tables$".data$E:.data$G")
-
-     GE.AMMI <- stats::prcomp(GE.Effs, scale. = FALSE)
+      GE.AMMI <- stats::prcomp(GE.Effs, scale. = FALSE)
 
      aami.biplot <-
        ggplot2::autoplot(
@@ -113,8 +106,9 @@ ammi_biplot.default <-
       theme_bw()
 
     return(list(
+
         aami.biplot = aami.biplot
-      , MeanPC1Plot = MeanPC1Plot
+        , MeanPC1Plot = MeanPC1Plot
           ))
 
   }

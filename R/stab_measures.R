@@ -66,64 +66,52 @@ stab_measures <- function(.data, .y, .gen, .env) {
 stab_measures.default <-
   function(.data, .y, .gen, .env){
 
-    Y   <- enquo(.y)
-    G   <- enquo(.gen)
-    E   <- enquo(.env)
+    Y   <- deparse(substitute(.y))
+    G   <- deparse(substitute(.gen))
+    E   <- deparse(substitute(.env))
 
-    g <- length(levels(.data$G))
-    e <- length(levels(.data$E))
-    r <- length(levels(.data$Rep))
+    g <- length(levels(.data[[G]]))
+    e <- length(levels(.data[[E]]))
+
+
 
     g_means <-
-          ge_means(
-                .data  = .data
-               , .y    = !! Y
-               , .gen  = !! G
-               , .env  = !! E
-               )$g_means
-
-    names(g_means) <- c("G", "Mean")
-
-     ge_means <-
-       ge_means(
-         .data  = .data
-         , .y    = !! Y
-         , .gen  = !! G
-         , .env  = !! E
-       )$ge_means
+      .data %>%
+      dplyr::group_by(!!rlang::sym(G)) %>%
+      dplyr::summarize(Mean = mean(!!rlang::sym(Y)))
 
 
-    ge_means1 <-
-      ge_means(
-        .data  = .data
-        , .y    = !! Y
-        , .gen  = !! G
-        , .env  = !! E
-      )$ge_means1
+    ge_means <-
+      .data %>%
+      dplyr::group_by(!!rlang::sym(G), !!rlang::sym(E)) %>%
+      dplyr::summarize(GE.Mean = mean(!!rlang::sym(Y))) %>%
+      tidyr::spread(key = E, value = GE.Mean)
+
+    ge_means1 <- as.matrix(ge_means[, -1])
+    rownames(ge_means1) <- c(ge_means[, 1])[[1]]
 
     gge_effects <-
-      ge_effects(
-        .data  = .data
-        , .y    = !! Y
-        , .gen  = !! G
-        , .env  = !! E
-      )$gge_effects
-
+      sweep(
+        x      = ge_means1
+        , MARGIN = 2
+        , STATS  = colMeans(ge_means1)
+      )
 
     ge_effects <-
-      ge_effects(
-        .data  = .data
-        , .y    = !! Y
-        , .gen  = !! G
-        , .env  = !! E
-      )$ge_effects
+      sweep(
+        x      = gge_effects
+        , MARGIN = 1
+        , STATS  = rowMeans(gge_effects)
+      )
+
+    ge_means1 <- as.matrix(ge_means[, -1])
 
     GE.Means    <- ge_means1
     Gen.Means   <- rowMeans(GE.Means)
-    Gen.SS      <- (e-1)*rowVars(GE.Means)
-    Gen.Var     <- rowVars(GE.Means)
-    Gen.CV      <- rowSds(GE.Means)/rowMeans(GE.Means)*100
-    Ecovalence  <- rowVars(ge_effects)*(e-1)
+    Gen.SS      <- (e-1)*matrixStats::rowVars(GE.Means)
+    Gen.Var     <- matrixStats::rowVars(GE.Means)
+    Gen.CV      <- matrixStats::rowSds(GE.Means)/rowMeans(GE.Means)*100
+    Ecovalence  <- matrixStats::rowVars(ge_effects)*(e-1)
     GE.SS       <- sum(Ecovalence)
     GE.MSE      <- sum(Ecovalence)/((g-1)*(e-1))
     Shukla.Var  <- Ecovalence * g/((g-2)*(e-1)) - GE.MSE/(g-2)

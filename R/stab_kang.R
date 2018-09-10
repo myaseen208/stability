@@ -63,45 +63,57 @@ stab_kang <- function(.data, .y, .rep, .gen, .env) {
 stab_kang.default <-
   function(.data, .y, .rep, .gen, .env){
 
-    Y   <- enquo(.y)
-    Rep <- enquo(.rep)
-    G   <- enquo(.gen)
-    E   <- enquo(.env)
+    Y   <- deparse(substitute(.y))
+    Rep <- deparse(substitute(.rep))
+    G   <- deparse(substitute(.gen))
+    E   <- deparse(substitute(.env))
 
-    g <- length(levels(.data$G))
-    e <- length(levels(.data$E))
-    r <- length(levels(.data$Rep))
+    g <- length(levels(.data[[G]]))
+    e <- length(levels(.data[[E]]))
+    r <- length(levels(.data[[Rep]]))
 
-    GMeans <-
-      ge_means(
-         .data  = .data
-        , .y    = !! Y
-        , .gen  = !! G
-        , .env  = !! E
-      )$g_means
-
-    names(GMeans) <- c("Gen", "Mean")
+    g_means <-
+      .data %>%
+      dplyr::group_by(!!rlang::sym(G)) %>%
+      dplyr::summarize(Mean = mean(!!rlang::sym(Y)))
 
 
-    GE.Effs <-
-      ge_effects(
-        .data  = .data
-        , .y    = !! Y
-        , .gen  = !! G
-        , .env  = !! E
-      )$ge_effects
 
-    g <- nrow(GE.Effs)
-    e <- ncol(GE.Effs)
+    ge_means <-
+      .data %>%
+      dplyr::group_by(!!rlang::sym(G), !!rlang::sym(E)) %>%
+      dplyr::summarize(GE.Mean = mean(!!rlang::sym(Y))) %>%
+      tidyr::spread(key = E, value = GE.Mean)
 
-    Wi <- as.matrix(diag(GE.Effs %*% t(GE.Effs)))
+    ge_means1 <- as.matrix(ge_means[, -1])
+    rownames(ge_means1) <- c(ge_means[, 1])[[1]]
+
+    gge_effects <-
+      sweep(
+        x      = ge_means1
+        , MARGIN = 2
+        , STATS  = colMeans(ge_means1)
+      )
+
+    ge_effects <-
+      sweep(
+        x      = gge_effects
+        , MARGIN = 1
+        , STATS  = rowMeans(gge_effects)
+      )
+
+
+    g <- nrow(ge_effects)
+    e <- ncol(ge_effects)
+
+    Wi <- as.matrix(diag(ge_effects %*% t(ge_effects)))
     colnames(Wi) <- "Wi"
 
     ShuklaVar <- (g*(g-1)*Wi - sum(Wi))/((e-1)*(g-1)*(g-2))
     colnames(ShuklaVar) <- "ShuklaVar"
 
     Kang <-
-      tibble::as_tibble(data.frame(GMeans, ShuklaVar)) %>%
+      tibble::as_tibble(data.frame(g_means, ShuklaVar)) %>%
       dplyr::mutate(
           rMean     = min_rank(desc(Mean))
         , rShukaVar = min_rank(ShuklaVar)

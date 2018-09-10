@@ -62,22 +62,23 @@ stab_fox <- function(.data, .y, .rep, .gen, .env) {
 stab_fox.default <-
   function(.data, .y, .rep, .gen, .env){
 
-    Y   <- enquo(.y)
-    Rep <- enquo(.rep)
-    G   <- enquo(.gen)
-    E   <- enquo(.env)
+    Y   <- deparse(substitute(.y))
+    Rep <- deparse(substitute(.rep))
+    G   <- deparse(substitute(.gen))
+    E   <- deparse(substitute(.env))
 
-    g <- length(levels(.data$G))
-    e <- length(levels(.data$E))
-    r <- length(levels(.data$Rep))
+    g <- length(levels(.data[[G]]))
+    e <- length(levels(.data[[E]]))
+    r <- length(levels(.data[[Rep]]))
+
 
     foxOut <-
         .data %>%
-          dplyr::group_by(!! E) %>%
-          dplyr::mutate(GRank = min_rank(desc(!! Y))) %>%
-          dplyr::group_by(!! G) %>%
+          dplyr::group_by(!!rlang::sym(E)) %>%
+          dplyr::mutate(GRank = min_rank(desc(!!rlang::sym(Y)))) %>%
+          dplyr::group_by(!!rlang::sym(G)) %>%
           dplyr::summarise(
-               Mean = mean(!! Y)
+               Mean = mean(!!rlang::sym(Y))
             ,  TOP  = sum(GRank <= 3)
             )
 

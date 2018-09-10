@@ -1,3 +1,14 @@
+# Changes in stability Version 0.4.0 
+## New Features 
+
+* Refined the R codes to take custom column names
+
+
+# Changes in stability Version 0.3.0
+## New Features 
+
+* Refined the codes
+
 # Changes in stability Version 0.2.0
 ## New Features 
 

@@ -65,27 +65,26 @@ stab_reg <- function(.data, .y, .rep, .gen, .env) {
 stab_reg.default <-
   function(.data, .y, .rep, .gen, .env){
 
-    Y   <- enquo(.y)
-    Rep <- enquo(.rep)
-    G   <- enquo(.gen)
-    E   <- enquo(.env)
+    Y   <- deparse(substitute(.y))
+    Rep <- deparse(substitute(.rep))
+    G   <- deparse(substitute(.gen))
+    E   <- deparse(substitute(.env))
 
-    g <- length(levels(.data$G))
-    e <- length(levels(.data$E))
-    r <- length(levels(.data$Rep))
+    g <- length(levels(.data[[G]]))
+    e <- length(levels(.data[[E]]))
+    r <- length(levels(.data[[Rep]]))
+
 
     g_means <-
       .data %>%
-      dplyr::group_by(!! G) %>%
-      dplyr::summarize(Mean = mean(!! Y))
-
-    names(g_means) <- c("G", "Mean")
+      dplyr::group_by(!!rlang::sym(G)) %>%
+      dplyr::summarize(Mean = mean(!!rlang::sym(Y)))
 
     DataNew  <-
       .data %>%
-        dplyr::group_by(!! G, !! E) %>%
-        dplyr::summarize(GEMean = mean(!! Y)) %>%
-        dplyr::group_by(!! E) %>%
+        dplyr::group_by(!!rlang::sym(G), !!rlang::sym(E)) %>%
+        dplyr::summarize(GEMean = mean(!!rlang::sym(Y))) %>%
+        dplyr::group_by(!!rlang::sym(E)) %>%
         dplyr::mutate(EnvMean = mean(GEMean))
 
     names(DataNew) <- c("Gen", "Env", "GEMean", "EnvMean")
@@ -106,21 +105,6 @@ stab_reg.default <-
       ) %>%
       tibble::as_tibble()
 
-    # IndvReg <-
-    #   DataNew %>%
-    #     group_by(Gen) %>%
-    #     do(
-    #       fm1 <- lm(GEMean ~ EnvMean, data = .)
-    #     ) %>%
-    #     summarise(
-    #         Slope = coef(fm1)[2]
-    #       , LCI   = confint(fm1)[2, 1]
-    #       , UCI   = confint(fm1)[2, 2]
-    #       , R.Sqr = summary(fm1)$r.squared
-    #       , RMSE  = summary(fm1)$sigma
-    #       , SSE   = summary(fm1)$sigma^2*df.residual(fm1)
-    #       , Delta = summary(fm1)$sigma^2*df.residual(fm1)/r
-    #     )
 
     MeanSlopePlot <-
       ggplot(data = StabIndvReg, mapping = aes(x = Slope, y = Mean)) +

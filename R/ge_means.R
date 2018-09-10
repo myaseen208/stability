@@ -65,18 +65,18 @@ ge_means.default <-
     ge_means <-
       .data %>%
       dplyr::group_by(!! G, !! E) %>%
-      dplyr::summarize(GE.Mean = mean(!! Y)) %>%
-      tidyr::spread(key = !! E, value = GE.Mean)
+      dplyr::summarize(Mean = mean(!! Y)) %>%
+      tidyr::spread(key = !! E, value = Mean)
 
     g_means <-
       .data %>%
       dplyr::group_by(!! G) %>%
-      dplyr::summarize(G.Mean = mean(!! Y))
+      dplyr::summarize(Mean = mean(!! Y))
 
     e_means <-
       .data %>%
         dplyr::group_by(!! E) %>%
-        dplyr::summarize(E.Mean = mean(!! Y))
+        dplyr::summarize(Mean = mean(!! Y))
 
 
     ge_means1 <- as.matrix(ge_means[, -1])
