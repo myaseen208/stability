@@ -1,3 +1,9 @@
+# Changes in stability Version 0.5.0 
+## New Features 
+
+* Added indiv_anova function
+
+
 # Changes in stability Version 0.4.0 
 ## New Features 
 

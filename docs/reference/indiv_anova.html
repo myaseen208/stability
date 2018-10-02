@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Additive Main Effects and Multiplicative Interaction (AMMI) — ammi • stability</title>
+<title>Individual ANOVA for Each Environment — indiv_anova • stability</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Additive Main Effects and Multiplicative Interaction (AMMI) — ammi" />
+<meta property="og:title" content="Individual ANOVA for Each Environment — indiv_anova" />
 
-<meta property="og:description" content="Performs Additive Main Effects and Multiplicative Interaction (AMMI) Analysis for Genotypes by Environment Interaction (GEI)" />
+<meta property="og:description" content="Individual ANOVA for Each Environment" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -96,21 +96,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Additive Main Effects and Multiplicative Interaction (AMMI)</h1>
+    <h1>Individual ANOVA for Each Environment</h1>
     
-    <div class="hidden name"><code>ammi.Rd</code></div>
+    <div class="hidden name"><code>indiv_anova.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Performs Additive Main Effects and Multiplicative Interaction (AMMI) Analysis for Genotypes by Environment Interaction (GEI)</p>
+    <p>Individual ANOVA for Each Environment</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>ammi</span>(<span class='no'>.data</span>, <span class='no'>.y</span>, <span class='no'>.rep</span>, <span class='no'>.gen</span>, <span class='no'>.env</span>)
+    <pre class="usage"><span class='fu'>indiv_anova</span>(<span class='no'>.data</span>, <span class='no'>.y</span>, <span class='no'>.rep</span>, <span class='no'>.gen</span>, <span class='no'>.env</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>ammi</span>(<span class='no'>.data</span>, <span class='no'>.y</span>, <span class='no'>.rep</span>, <span class='no'>.gen</span>, <span class='no'>.env</span>)</pre>
+<span class='fu'>indiv_anova</span>(<span class='no'>.data</span>, <span class='no'>.y</span>, <span class='no'>.rep</span>, <span class='no'>.gen</span>, <span class='no'>.env</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,7 +139,7 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Stability Measures</p>
+    <p>Additive ANOVA</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -150,44 +150,91 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='fu'>data</span>(<span class='no'>ge_data</span>)
-<span class='no'>Yield.ammi</span> <span class='kw'>&lt;-</span>
-     <span class='fu'>ammi</span>(
+<span class='no'>Yield.indiv_anova</span> <span class='kw'>&lt;-</span>
+         <span class='fu'>indiv_anova</span>(
             <span class='kw'>.data</span> <span class='kw'>=</span> <span class='no'>ge_data</span>
           , <span class='kw'>.y</span>    <span class='kw'>=</span> <span class='no'>Yield</span>
           , <span class='kw'>.rep</span>  <span class='kw'>=</span> <span class='no'>Rep</span>
           , <span class='kw'>.gen</span>  <span class='kw'>=</span> <span class='no'>Gen</span>
           , <span class='kw'>.env</span>  <span class='kw'>=</span> <span class='no'>Env</span>
-      )
-<span class='no'>Yield.ammi</span></div><div class='output co'>#&gt; $anova
-#&gt; Analysis of Variance Table
-#&gt; 
-#&gt; Response: .data[[Y]]
-#&gt;            Df    Sum Sq  Mean Sq F value    Pr(&gt;F)    
-#&gt; Env        10 263940496 26394050 68.0551 1.995e-08 ***
-#&gt; Rep(Env)   11   4266167   387833                      
-#&gt; Gen        59  71662431  1214617 12.2482 &lt; 2.2e-16 ***
-#&gt; Gen:Env   590 201336476   341248  3.4411 &lt; 2.2e-16 ***
-#&gt; Residuals 649  64359568    99167                      
+          )
+<span class='no'>Yield.indiv_anova</span></div><div class='output co'>#&gt; $`Analysis of Variance for FSD`
+#&gt;             Df   Sum Sq Mean Sq F value Pr(&gt;F)    
+#&gt; Gen         59 45524231  771597   32.62 &lt;2e-16 ***
+#&gt; Residuals   60  1419180   23653                   
 #&gt; ---
 #&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #&gt; 
-#&gt; $pc.anova
-#&gt; [38;5;246m# A tibble: 11 x 9[39m
-#&gt;    PC     SingVal  Percent accumPerc    Df       SS  Mean.Sq  F.value   Pr..F.
-#&gt;    [3m[38;5;246m&lt;fct&gt;[39m[23m    [3m[38;5;246m&lt;dbl&gt;[39m[23m    [3m[38;5;246m&lt;dbl&gt;[39m[23m     [3m[38;5;246m&lt;dbl&gt;[39m[23m [3m[38;5;246m&lt;dbl&gt;[39m[23m    [3m[38;5;246m&lt;dbl&gt;[39m[23m    [3m[38;5;246m&lt;dbl&gt;[39m[23m    [3m[38;5;246m&lt;dbl&gt;[39m[23m    [3m[38;5;246m&lt;dbl&gt;[39m[23m
-#&gt; [38;5;250m 1[39m PC1   4.50[38;5;246me[39m+ 3 2.01[38;5;246me[39m+ 1      20.1    68 4.04[38;5;246me[39m+ 7 5.95[38;5;246me[39m+ 5 6.00[38;5;246me[39m+ 0 0.  [38;5;246m [39m   
-#&gt; [38;5;250m 2[39m PC2   4.17[38;5;246me[39m+ 3 1.73[38;5;246me[39m+ 1      37.4    66 3.49[38;5;246me[39m+ 7 5.28[38;5;246me[39m+ 5 5.33[38;5;246me[39m+ 0 0.  [38;5;246m [39m   
-#&gt; [38;5;250m 3[39m PC3   4.05[38;5;246me[39m+ 3 1.63[38;5;246me[39m+ 1      53.7    64 3.27[38;5;246me[39m+ 7 5.12[38;5;246me[39m+ 5 5.16[38;5;246me[39m+ 0 0.  [38;5;246m [39m   
-#&gt; [38;5;250m 4[39m PC4   3.49[38;5;246me[39m+ 3 1.21[38;5;246me[39m+ 1      65.8    62 2.44[38;5;246me[39m+ 7 3.93[38;5;246me[39m+ 5 3.96[38;5;246me[39m+ 0 0.  [38;5;246m [39m   
-#&gt; [38;5;250m 5[39m PC5   3.38[38;5;246me[39m+ 3 1.13[38;5;246me[39m+ 1      77.1    60 2.29[38;5;246me[39m+ 7 3.81[38;5;246me[39m+ 5 3.84[38;5;246me[39m+ 0 0.  [38;5;246m [39m   
-#&gt; [38;5;250m 6[39m PC6   3.11[38;5;246me[39m+ 3 9.63[38;5;246me[39m+ 0      86.7    58 1.94[38;5;246me[39m+ 7 3.34[38;5;246me[39m+ 5 3.37[38;5;246me[39m+ 0 4.02[38;5;246me[39m[31m-14[39m
-#&gt; [38;5;250m 7[39m PC7   2.30[38;5;246me[39m+ 3 5.25[38;5;246me[39m+ 0      92.0    56 1.06[38;5;246me[39m+ 7 1.89[38;5;246me[39m+ 5 1.90[38;5;246me[39m+ 0 1.45[38;5;246me[39m[31m- 4[39m
-#&gt; [38;5;250m 8[39m PC8   2.03[38;5;246me[39m+ 3 4.10[38;5;246me[39m+ 0      96.1    54 8.25[38;5;246me[39m+ 6 1.53[38;5;246me[39m+ 5 1.54[38;5;246me[39m+ 0 9.52[38;5;246me[39m[31m- 3[39m
-#&gt; [38;5;250m 9[39m PC9   1.52[38;5;246me[39m+ 3 2.30[38;5;246me[39m+ 0      98.4    52 4.63[38;5;246me[39m+ 6 8.91[38;5;246me[39m+ 4 8.98[38;5;246me[39m[31m- 1[39m 6.77[38;5;246me[39m[31m- 1[39m
-#&gt; [38;5;250m10[39m PC10  1.28[38;5;246me[39m+ 3 1.63[38;5;246me[39m+ 0     100      50 3.27[38;5;246me[39m+ 6 6.55[38;5;246me[39m+ 4 6.60[38;5;246me[39m[31m- 1[39m 9.66[38;5;246me[39m[31m- 1[39m
-#&gt; [38;5;250m11[39m PC11  1.92[38;5;246me[39m[31m-11[39m 3.64[38;5;246me[39m[31m-28[39m     100      48 7.34[38;5;246me[39m[31m-22[39m 1.53[38;5;246me[39m[31m-23[39m 1.54[38;5;246me[39m[31m-28[39m 1.00[38;5;246me[39m+ 0
+#&gt; $`Analysis of Variance for FSDR`
+#&gt;             Df   Sum Sq Mean Sq F value   Pr(&gt;F)    
+#&gt; Gen         59 14019781  237623   2.724 7.91e-05 ***
+#&gt; Residuals   60  5234860   87248                     
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#&gt; 
+#&gt; $`Analysis of Variance for Okara`
+#&gt;             Df   Sum Sq Mean Sq F value   Pr(&gt;F)    
+#&gt; Gen         59 26802597  454281   3.538 1.22e-06 ***
+#&gt; Residuals   60  7703642  128394                     
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#&gt; 
+#&gt; $`Analysis of Variance for Sargodha`
+#&gt;             Df   Sum Sq Mean Sq F value  Pr(&gt;F)    
+#&gt; Gen         59 38381469  650533   4.254 4.3e-08 ***
+#&gt; Residuals   60  9175301  152922                    
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#&gt; 
+#&gt; $`Analysis of Variance for Gujranwala`
+#&gt;             Df   Sum Sq Mean Sq F value   Pr(&gt;F)    
+#&gt; Gen         59 41863914  709558   4.687 6.55e-09 ***
+#&gt; Residuals   60  9082956  151383                     
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#&gt; 
+#&gt; $`Analysis of Variance for KotNaina`
+#&gt;             Df   Sum Sq Mean Sq F value   Pr(&gt;F)    
+#&gt; Gen         59 26692263  452411     4.3 3.51e-08 ***
+#&gt; Residuals   60  6313095  105218                     
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#&gt; 
+#&gt; $`Analysis of Variance for KSK`
+#&gt;             Df   Sum Sq Mean Sq F value   Pr(&gt;F)    
+#&gt; Gen         59 17890629  303231   3.472 1.68e-06 ***
+#&gt; Residuals   60  5239575   87326                     
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#&gt; 
+#&gt; $`Analysis of Variance for Khanewal`
+#&gt;             Df   Sum Sq Mean Sq F value   Pr(&gt;F)    
+#&gt; Gen         59 15125214  256360   2.451 0.000345 ***
+#&gt; Residuals   60  6274965  104583                     
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#&gt; 
+#&gt; $`Analysis of Variance for Sahiwal`
+#&gt;             Df   Sum Sq Mean Sq F value   Pr(&gt;F)    
+#&gt; Gen         59 26109918  442541   4.095 8.82e-08 ***
+#&gt; Residuals   60  6484679  108078                     
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#&gt; 
+#&gt; $`Analysis of Variance for Bhakkar`
+#&gt;             Df   Sum Sq Mean Sq F value  Pr(&gt;F)   
+#&gt; Gen         59 10870598  184247   1.862 0.00885 **
+#&gt; Residuals   60  5936717   98945                   
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#&gt; 
+#&gt; $`Analysis of Variance for Bahawalnagar`
+#&gt;             Df  Sum Sq Mean Sq F value Pr(&gt;F)  
+#&gt; Gen         59 9718292  164717   1.716 0.0196 *
+#&gt; Residuals   60 5760765   96013                 
+#&gt; ---
+#&gt; Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #&gt; </div><div class='input'>
-
 
 </div></pre>
   </div>
@@ -208,6 +255,7 @@
 <ol>
 <li><p>Muhammad Yaseen (<a href='mailto:myaseen208@gmail.com'>myaseen208@gmail.com</a>)</p></li>
 <li><p>Kent M. Edkridge (<a href='mailto:keskridge1@unl.edu'>keskridge1@unl.edu</a>)</p></li>
+<li><p>Ghulam Murtaza (<a href='mailto:gmurtaza208@gmail.com'>gmurtaza208@gmail.com</a>)</p></li>
 </ol>
 
   </div>
