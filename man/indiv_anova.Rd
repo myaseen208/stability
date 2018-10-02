@@ -5,8 +5,6 @@
 \alias{indiv_anova.default}
 \title{Individual ANOVA for Each Environment}
 \usage{
-indiv_anova(.data, .y, .rep, .gen, .env)
-
 \method{indiv_anova}{default}(.data, .y, .rep, .gen, .env)
 }
 \arguments{

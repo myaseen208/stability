@@ -41,6 +41,14 @@
 #' Yield.indiv_anova
 #'
 #'
+if(getRversion() >= "2.15.1"){
+  utils::globalVariables(
+    c(
+        "."
+    )
+  )
+}
+
 indiv_anova <- function(.data, .y, .rep, .gen, .env) {
   UseMethod("indiv_anova")
 }
