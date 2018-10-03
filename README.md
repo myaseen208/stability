@@ -12,6 +12,7 @@
 ## Authors
 1. Muhammad Yaseen (myaseen208@gmail.com)
 2. Kent M. Edkridge (keskridge1@unl.edu)
+3. Ghulam Murtaza (gmurtaza208@gmail.com)
 
 ## Installation
 Use **devtools** to install the development version from Github:
