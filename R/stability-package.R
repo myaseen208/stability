@@ -16,6 +16,7 @@
 #' \enumerate{
 #'          \item Muhammad Yaseen (\email{myaseen208@@gmail.com})
 #'          \item Kent M. Edkridge (\email{keskridge1@@unl.edu})
+#'          \item Ghulam Murtaza (\email{gmurtaza208@@gmail.com})
 #'          }
 #'
 NULL

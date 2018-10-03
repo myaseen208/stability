@@ -18,5 +18,6 @@ and  Kang's (1991) simultaneous selection for high yielding and stable parameter
 \enumerate{
          \item Muhammad Yaseen (\email{myaseen208@gmail.com})
          \item Kent M. Edkridge (\email{keskridge1@unl.edu})
+         \item Ghulam Murtaza (\email{gmurtaza208@gmail.com})
          }
 }
