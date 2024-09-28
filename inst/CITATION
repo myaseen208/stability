@@ -1,0 +1,11 @@
+bibentry(
+  "manual",
+  header = "Please, support this project by citing it in your publications!",
+  title = "stability: Stability Analysis of Genotype by Environment Interaction (GEI)",
+	author = c(
+	           person(c("Muhammad"), "Yaseen")
+	         , person(c("Kent", "M."), "Eskridge")
+	         ),
+  year = 2018,
+  journal = "The Comprehensive R Archive Network (CRAN)"
+)

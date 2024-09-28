@@ -81,6 +81,9 @@ indiv_anova.default <-
           , levels(.data[[E]])
         )
 
+    attr(ind_aov$m1, "subheadings") <- names(ind_aov$m1)
+
+
     return(ind_aov = ind_aov$m1)
   }
 

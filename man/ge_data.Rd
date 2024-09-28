@@ -4,7 +4,9 @@
 \name{ge_data}
 \alias{ge_data}
 \title{Data for Genotypes by Environment Interaction (GEI)}
-\format{A \code{data.frame} 1320 obs. of  6 variables.}
+\format{
+A \code{data.frame} 1320 obs. of  6 variables.
+}
 \usage{
 data(ge_data)
 }
