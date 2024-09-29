@@ -1,7 +1,7 @@
 
 ## `stability`: Stability Analysis of Genotype by Environment Interaction (GEI)
 
-###### Version : [0.5.0](https://myaseen208.com/stability/); Copyright (C) 2018-2024: License: [GPL-2\|GPL-3](https://www.r-project.org/Licenses/)
+###### Version : [0.7.0](https://myaseen208.com/stability/); Copyright (C) 2018-2024: License: [GPL-2\|GPL-3](https://www.r-project.org/Licenses/)
 
 ##### *Muhammad Yaseen<sup>1,2</sup>, and Kent M. Eskridge<sup>3</sup>*
 
@@ -31,24 +31,28 @@ downloads](https://cranlogs.r-pkg.org/badges/grand-total/stability?color=green)]
 [![Project Status:
 WIP](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2024--09--28-yellowgreen.svg)](https://github.com/myaseen208/stability)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2024--09--29-yellowgreen.svg)](https://github.com/myaseen208/stability)
 \*\*\*
 
 ## Description
 
-Functionalities to perform Stability Analysis of Genotype by Environment
-Interaction (GEI) to identify superior and stable genotypes under
-diverse environments. It performs Eberhart & Russel’s ANOVA (1966)
-([doi:10.2135/cropsci1966.0011183X000600010011x\>), Finlay and Wilkinson
-(1963) Joint Linear Regression (\<doi:10.1071/AR9630742\>), Wricke
-(1962, 1964) Ecovalence, Shukla’s stability variance parameter (1972)
-(\<doi:10.1038/hdy.1972.87\>) and Kang’s (1991)
+Provides functionalities for performing stability analysis of genotype
+by environment interaction (GEI) to identify superior and stable
+genotypes across diverse environments. It implements Eberhart and
+Russell’s ANOVA method
+(1966)([doi:10.2135/cropsci1966.0011183X000600010011x\>), Finlay and
+Wilkinson’s Joint Linear Regression method (1963)
+(\<doi:10.1071/AR9630742\>), Wricke’s Ecovalence (1962, 1964), Shukla’s
+stability variance parameter (1972) (\<doi:10.1038/hdy.1972.87\>),
+Kang’s simultaneous selection for high yield and stability (1991)
 (\<doi:10.2134/agronj1991.00021962008300010037x](https://doi.org/10.2135/cropsci1966.0011183X000600010011x%3E),
-Finlay and Wilkinson (1963) Joint Linear Regression
-(<doi:10.1071/AR9630742>), Wricke (1962, 1964) Ecovalence, Shukla’s
-stability variance parameter (1972) (<doi:10.1038/hdy.1972.87>) and
-Kang’s (1991) (\<<doi:10.2134/agronj1991.00021962008300010037x>))
-simultaneous selection for high yielding and stable parameter.
+Finlay and Wilkinson’s Joint Linear Regression method (1963)
+(<doi:10.1071/AR9630742>), Wricke’s Ecovalence (1962, 1964), Shukla’s
+stability variance parameter (1972) (<doi:10.1038/hdy.1972.87>), Kang’s
+simultaneous selection for high yield and stability (1991)
+(\<<doi:10.2134/agronj1991.00021962008300010037x>)), Additive Main
+Effects and Multiplicative Interaction (AMMI) method and Genotype plus
+Genotypes by Environment (GGE) Interaction methods.
 
 ## Installation
 
@@ -87,20 +91,17 @@ To cite the methods in the package use:
 
 ``` r
 citation("stability")
-To cite package 'stability' in publications use:
+Please, support this project by citing it in your publications!
 
-  Muhammad Yaseen, Kent M. Eskridge, Ghulam Murtaza (2018). _stability:
-  Stability Analysis of Genotype by Environment Interaction (GEI)_. R
-  package version 0.5.0,
-  <https://CRAN.R-project.org/package=stability>.
+  Yaseen M, Eskridge KM (2018). _stability: Stability Analysis of
+  Genotype by Environment Interaction (GEI)_.
 
 A BibTeX entry for LaTeX users is
 
   @Manual{,
     title = {stability: Stability Analysis of Genotype by Environment Interaction (GEI)},
-    author = {{Muhammad Yaseen} and {Kent M. Eskridge} and {Ghulam Murtaza}},
+    author = {Muhammad Yaseen and Kent M. Eskridge},
     year = {2018},
-    note = {R package version 0.5.0},
-    url = {https://CRAN.R-project.org/package=stability},
+    journal = {The Comprehensive R Archive Network (CRAN)},
   }
 ```
