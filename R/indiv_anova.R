@@ -15,7 +15,6 @@
 #' \enumerate{
 #'          \item Muhammad Yaseen (\email{myaseen208@@gmail.com})
 #'          \item Kent M. Edkridge (\email{keskridge1@@unl.edu})
-#'          \item Ghulam Murtaza (\email{gmurtaza208@@gmail.com})
 #'          }
 #'
 #' @references
@@ -80,6 +79,9 @@ indiv_anova.default <-
           "Analysis of Variance for "
           , levels(.data[[E]])
         )
+
+    attr(ind_aov$m1, "subheadings") <- names(ind_aov$m1)
+
 
     return(ind_aov = ind_aov$m1)
   }

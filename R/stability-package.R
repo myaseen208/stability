@@ -1,6 +1,5 @@
 #' @name stability
 #' @title Stability Analysis of Genotype by Environment Interaction (GEI)
-#' @docType package
 #' @description
 #'
 #' The \code{stability} package provides functionalities to perform
@@ -16,7 +15,6 @@
 #' \enumerate{
 #'          \item Muhammad Yaseen (\email{myaseen208@@gmail.com})
 #'          \item Kent M. Edkridge (\email{keskridge1@@unl.edu})
-#'          \item Ghulam Murtaza (\email{gmurtaza208@@gmail.com})
 #'          }
 #'
 NULL

@@ -7,8 +7,7 @@
 \usage{
 stab_par(.data, .y, .rep, .gen, .env, alpha = 0.1, .envCov = NULL)
 
-\method{stab_par}{default}(.data, .y, .rep, .gen, .env, alpha = 0.1,
-  .envCov = NULL)
+\method{stab_par}{default}(.data, .y, .rep, .gen, .env, alpha = 0.1, .envCov = NULL)
 }
 \arguments{
 \item{.data}{data.frame}
